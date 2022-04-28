@@ -51,7 +51,7 @@ cat << \EOF > /etc/lkl-haproxy/lkl-hijack.json
 {
   "gateway":"10.0.0.1",
   "singlecpu":"1",
-  "sysctl":"net.ipv4.tcp_congestion_control=bbr",
+  "sysctl":"net.ipv4.tcp_congestion_control=bbrplus",
   "sysctl":"net.ipv4.tcp_rmem=4096 87380 4194304",
   "sysctl":"net.ipv4.tcp_wmem=4096 16384 4194304",
   "sysctl":"net.ipv4.tcp_mem=94500000 915000000 927000000",
