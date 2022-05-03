@@ -39,10 +39,22 @@ strip --strip-unneeded ./tools/lkl/lib/hijack/liblkl-hijack.so
 ```
 
 ### 使用方式
-lkl-hijack.json文件方式，调用haproxy进行端口转发（openvz 7测试的最高支持2.0版本）
+lkl-hijack.json文件方式，调用haproxy进行端口转发（openvz 7 下的 Debian 10 系统测试的最高支持 haproxy 2.0 版本）
 
+#### 创建 lkl-haproxy 文件夹
 ```
 mkdir /etc/lkl-haproxy
+```
+
+#### Debian 10 下安装 2.0 版本 haproxy
+```
+curl https://haproxy.debian.net/bernat.debian.org.gpg | gpg --dearmor > /usr/share/keyrings/haproxy.debian.net.gpg
+echo deb "[signed-by=/usr/share/keyrings/haproxy.debian.net.gpg]" http://haproxy.debian.net buster-backports-2.0 main > /etc/apt/sources.list.d/haproxy.list
+
+apt-get update
+apt-get install haproxy=2.0.\* -y
+systemctl stop haproxy
+systemctl disable haproxy
 ```
 
 #### lkl-hijack.json 文件配置
