@@ -39,7 +39,9 @@ strip --strip-unneeded ./tools/lkl/lib/hijack/liblkl-hijack.so
 ```
 
 ### 使用方式
-lkl-hijack.json文件方式，调用haproxy进行端口转发（openvz 7 下的 Debian 10 系统测试的最高支持 haproxy 2.0 版本）
+lkl-hijack.json文件方式，调用haproxy进行端口转发
+
+openvz 7 下的 Debian 10 系统测试的最高支持 haproxy 2.0 版本
 
 #### 创建 lkl-haproxy 文件夹
 ```
