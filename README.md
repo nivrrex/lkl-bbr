@@ -9,12 +9,14 @@ lkl的最新5.4和5.10版本，原版基础上打了bbrplus补丁（感谢UJX6N�
 主要给自己的OpenVZ小鸡使用，主机需开通TUN/TAP
 
 ### 5.4 版本
-https://github.com/lkl/linux
+https://github.com/lkl/linux/tree/ab7f3246b8cdecfa6c25a02a8c027d770e5b2dfd      #官方 5.4版本
 
 https://github.com/UJX6N/bbrplus-5.4
 
 ### 5.10 版本
-https://github.com/ngi-mptcp/lkl-next/
+https://github.com/ngi-mptcp/lkl-next/tree/5673311447c1d34367c0e77cdc8947191cccf056     #官方 5.10版本
+
+https://github.com/lkl/linux/tree/10c7b5dee8c424cc2ab754e519ecb73350283ff9        #非官方 5.10版本
 
 https://github.com/UJX6N/bbrplus-5.10
 
