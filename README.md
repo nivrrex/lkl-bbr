@@ -14,9 +14,9 @@ https://github.com/lkl/linux/tree/ab7f3246b8cdecfa6c25a02a8c027d770e5b2dfd      
 https://github.com/UJX6N/bbrplus-5.4
 
 ### 5.10 版本
-https://github.com/ngi-mptcp/lkl-next/tree/5673311447c1d34367c0e77cdc8947191cccf056     # 官方 5.10 版本
-
 https://github.com/lkl/linux/tree/10c7b5dee8c424cc2ab754e519ecb73350283ff9        # 非官方 5.10 版本
+
+https://github.com/ngi-mptcp/lkl-next/tree/5673311447c1d34367c0e77cdc8947191cccf056     # 官方 5.10 版本
 
 https://github.com/UJX6N/bbrplus-5.10
 
