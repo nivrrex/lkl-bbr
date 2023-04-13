@@ -110,24 +110,30 @@ backend proxy-out
 EOF
 ```
 
-#### tap及iptables转发设置 （感谢mzz2017/lkl-haproxy脚本）
+#### tap及iptables转发设置 （感谢mzz2017/lkl-haproxy脚本，进行部分修改）
 ```
-cat << \EOF > /etc/lkl-haproxy/redirect.sh
+cat << \EOF > /etc/lkl-haproxy/init.sh
 #!/bin/sh
 ip tuntap del lkl-tap mode tap > /dev/null 2>&1 || true
 ip tuntap add lkl-tap mode tap
 ip addr add 10.0.0.1/24 dev lkl-tap
 ip link set lkl-tap up
-sysctl -w net.ipv4.ip_forward=1
+sysctl -w net.ipv4.ip_forward=1 > /dev/null 2>&1 
 iptables -P FORWARD ACCEPT
 iptables -t nat -D POSTROUTING -o $(awk '$2 == 00000000 { print $1 }' /proc/net/route) -j MASQUERADE > /dev/null 2>&1 || true
 iptables -t nat -A POSTROUTING -o $(awk '$2 == 00000000 { print $1 }' /proc/net/route) -j MASQUERADE
-iptables -t nat -I PREROUTING -i venet0 -p tcp --dport 443 -j DNAT --to-destination 10.0.0.2
-
-LKL_HIJACK_CONFIG_FILE=/etc/lkl-haproxy/lkl-hijack.json LD_PRELOAD=/etc/lkl-haproxy/liblkl-hijack.so /usr/sbin/haproxy -f /etc/lkl-haproxy/haproxy.cfg
-exit 0
+iptables -t nat -I PREROUTING -i venet0 -p tcp -m multiport --dports 443,8989,22628 -j DNAT --to-destination 10.0.0.2
 EOF
-chmod +x /etc/lkl-haproxy/redirect.sh
+chmod +x /etc/lkl-haproxy/init.sh
+
+cat << \EOF > /etc/lkl-haproxy/destroy.sh
+#!/bin/sh
+ip link set lkl-tap down
+ip tuntap del lkl-tap mode tap > /dev/null 2>&1 || true
+iptables -t nat -D POSTROUTING -o $(awk '$2 == 00000000 { print $1 }' /proc/net/route) -j MASQUERADE > /dev/null 2>&1 || true
+iptables -t nat -D PREROUTING -i venet0 -p tcp -m multiport --dports 443,8989,22628 -j DNAT --to-destination 10.0.0.2
+EOF
+chmod +x /etc/lkl-haproxy/destroy.sh
 ```
 
 #### 创建systemd服务
@@ -140,8 +146,11 @@ Wants=network.target nss-lookup.target
 StartLimitIntervalSec=0
 
 [Service]
-Environment=''
-ExecStart=/etc/lkl-haproxy/redirect.sh
+Environment="LKL_HIJACK_CONFIG_FILE=/etc/lkl-haproxy/lkl-hijack.json"
+Environment="LD_PRELOAD=/etc/lkl-haproxy/liblkl-hijack.so"
+ExecStartPre=/etc/lkl-haproxy/init.sh
+ExecStart=/usr/sbin/haproxy -f /etc/lkl-haproxy/haproxy.cfg
+ExecStopPost=/etc/lkl-haproxy/destroy.sh
 Type=simple
 KillMode=process
 Restart=always
